@@ -57,10 +57,10 @@ if (databaseQuestion === "view all departments") {
   addDepartment();
 } else if (databaseQuestion === "add a role") {
   addRole();
-// } else if (databaseQuestion === "add an employee") {
-//   addEmployee()
-// } else if (databaseQuestion === "update an employee role") {
-//   UpdateRole();
+} else if (databaseQuestion === "add an employee") {
+  addEmployee()
+} else if (databaseQuestion === "update an employee role") {
+  updateRole();
 }
 })
 }
@@ -176,6 +176,118 @@ function addRole() {
         }
         viewRoles();
         init();
+      });
+    });
+}
+
+// function to add an employee
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "Enter the first name of the employee:",
+        validate: function (input) {
+          if (input.trim() === "") {
+            return "First name cannot be empty.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "Enter the last name of the employee:",
+        validate: function (input) {
+          if (input.trim() === "") {
+            return "Last name cannot be empty.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "roleId",
+        message: "Enter the role ID for the employee:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Role ID must be a positive integer.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "managerId",
+        message: "Enter the manager ID for the employee (optional):",
+        validate: function (input) {
+          if (input !== "" && !/^\d+$/.test(input)) {
+            return "Manager ID must be a positive integer or leave it blank.";
+          }
+          return true;
+        }
+      }
+    ])
+    .then((data) => {
+      const { firstName, lastName, roleId, managerId } = data;
+      
+      const query = "INSERT INTO employee (First_name, Last_name, RoleID, ManagerID) VALUES (?, ?, ?, ?)";
+
+      db.query(query, [firstName, lastName, roleId, managerId], function (err, result) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(`Employee '${firstName} ${lastName}' added successfully.`);
+        }
+        viewEmployees();
+        init();
+      });
+    });
+}
+
+// function to update an employee
+function updateRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "employeeId",
+        message: "Enter the ID of the employee to update:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Employee ID must be a positive integer.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "roleId",
+        message: "Enter the new role ID for the employee:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Role ID must be a positive integer.";
+          }
+          return true;
+        }
+      }
+    ])
+    .then((data) => {
+      const { employeeId, roleId } = data;
+      
+      const query = "UPDATE employee SET RoleID = ? WHERE employeeID = ?";
+
+      db.query(query, [roleId, employeeId], function (err, result) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(`Employee with ID ${employeeId} updated successfully.`);
+        }
+        
+        viewEmployees();
+        init();
+        
       });
     });
 }

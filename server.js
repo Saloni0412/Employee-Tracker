@@ -15,7 +15,9 @@ const db = mysql.createConnection(
     host: "localhost",
     user: "root",
     password: "root",
+    database: "employee_db"
   },
+  console.log("connected to db")
 );
 
 app.listen(PORT, () => {
@@ -49,22 +51,32 @@ if (databaseQuestion === "view all departments") {
   viewDepartments();
 } else if (databaseQuestion === "view all roles") {
   viewRoles();
-} else if (databaseQuestion === "view all employees") {
-  viewEmployees();
-} else if (databaseQuestion === "add a department") {
-  addDepartment();
-} else if (databaseQuestion === "add a role") {
-  addRole();
-} else if (databaseQuestion === "add an employee") {
-  addEmployee()
-} else if (databaseQuestion === "update an employee role") {
-  UpdateRole();
+// } else if (databaseQuestion === "view all employees") {
+//   viewEmployees();
+// } else if (databaseQuestion === "add a department") {
+//   addDepartment();
+// } else if (databaseQuestion === "add a role") {
+//   addRole();
+// } else if (databaseQuestion === "add an employee") {
+//   addEmployee()
+// } else if (databaseQuestion === "update an employee role") {
+//   UpdateRole();
 }
 })
 }
 
 init();
 
-viewDepartments() {
+function viewDepartments() {
+  db.query('SELECT * FROM department', function (err, results) {
+    console.table(results);
+    init();
+  });
+}
 
+function viewRoles() {
+  db.query('SELECT * FROM role', function (err, results) {
+    console.table(results);
+    init();
+  });
 }

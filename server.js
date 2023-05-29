@@ -51,10 +51,10 @@ if (databaseQuestion === "view all departments") {
   viewDepartments();
 } else if (databaseQuestion === "view all roles") {
   viewRoles();
-// } else if (databaseQuestion === "view all employees") {
-//   viewEmployees();
-// } else if (databaseQuestion === "add a department") {
-//   addDepartment();
+} else if (databaseQuestion === "view all employees") {
+  viewEmployees();
+} else if (databaseQuestion === "add a department") {
+  addDepartment();
 // } else if (databaseQuestion === "add a role") {
 //   addRole();
 // } else if (databaseQuestion === "add an employee") {
@@ -77,6 +77,21 @@ function viewDepartments() {
 function viewRoles() {
   db.query('SELECT * FROM role', function (err, results) {
     console.table(results);
+    init();
+  });
+}
+
+function viewEmployees() {
+  db.query('SELECT * FROM employee', function (err, results) {
+    console.log(results);
+    init();
+  });
+}
+
+function addDepartment() {
+  db.query('SELECT * FROM department', function (err, results) {
+    console.log(results);
+    console.log("unread")
     init();
   });
 }

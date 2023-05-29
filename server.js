@@ -55,8 +55,8 @@ if (databaseQuestion === "view all departments") {
   viewEmployees();
 } else if (databaseQuestion === "add a department") {
   addDepartment();
-// } else if (databaseQuestion === "add a role") {
-//   addRole();
+} else if (databaseQuestion === "add a role") {
+  addRole();
 // } else if (databaseQuestion === "add an employee") {
 //   addEmployee()
 // } else if (databaseQuestion === "update an employee role") {
@@ -67,6 +67,7 @@ if (databaseQuestion === "view all departments") {
 
 init();
 
+// function to view all department data
 function viewDepartments() {
   db.query('SELECT * FROM department', function (err, results) {
     console.table(results);
@@ -74,6 +75,7 @@ function viewDepartments() {
   });
 }
 
+// function to view role data
 function viewRoles() {
   db.query('SELECT * FROM role', function (err, results) {
     console.table(results);
@@ -81,17 +83,99 @@ function viewRoles() {
   });
 }
 
+// function to view employee data
 function viewEmployees() {
   db.query('SELECT * FROM employee', function (err, results) {
-    console.log(results);
+    console.table(results);
     init();
   });
 }
 
+//fucntion to add a department
 function addDepartment() {
-  db.query('SELECT * FROM department', function (err, results) {
-    console.log(results);
-    console.log("unread")
-    init();
-  });
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "departmentName",
+        message: "Enter the name of the department:",
+        validate: function (input) {
+          if (input.trim() === "") {
+            return "Department name cannot be empty.";
+          }
+          return true;
+        }
+      }
+    ])
+    .then((data) => {
+      const departmentName = data.departmentName;
+      
+      const query = "INSERT INTO department (departmentName) VALUES (?)";
+
+      db.query(query, [departmentName], function (err, result) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(`Department '${departmentName}' added successfully.`);
+        }
+        
+        viewDepartments();
+        init();
+      });
+    });
+}
+
+// function to add a role
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "roleTitle",
+        message: "Enter the title of the role:",
+        validate: function (input) {
+          if (input.trim() === "") {
+            return "Role title cannot be empty.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "roleSalary",
+        message: "Enter the salary for the role:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Salary must be a positive integer.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "departmentId",
+        message: "Enter the department ID for the role:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Department ID must be a positive integer.";
+          }
+          return true;
+        }
+      }
+    ])
+    .then((data) => {
+      const { roleTitle, roleSalary, departmentId } = data;
+      
+      const query = "INSERT INTO role (Title, Salary, DepartmentId) VALUES (?, ?, ?)";
+
+      db.query(query, [roleTitle, roleSalary, departmentId], function (err, result) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(`Role '${roleTitle}' added successfully.`);
+        }
+        viewRoles();
+        init();
+      });
+    });
 }

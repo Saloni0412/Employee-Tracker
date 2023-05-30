@@ -22,7 +22,7 @@ To install this application you will need to download NODE JS. Once node js is d
 
 This is a project portraying the skills to generate an employee's database a company can use and modify according to their need to filter out their choices. To use this app, type node server.js in the terminal and user will be prompted with the choices to see the data. Select the choice in the way you would like to see the database. Once the selection is complted and to exit the application one can press CTRL + C. Link for the walkthrough video of this application is mentioned below.
  
-[Link to the video](https://drive.google.com/file/d/1-lVmPd7jU8efl9xYmNUoXg228LVJPC51/view)
+[Link to the video](https://drive.google.com/file/d/1Aaupqha-veMRp0iD1TCVepc7W8By0lOR/view)
 
 
 ## Credits

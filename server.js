@@ -68,8 +68,6 @@ if (databaseQuestion === "view all departments") {
   viewEmployeeByManager();
 } else if (databaseQuestion === "update employee manager") {
   updateManager();
-// } else if (databaseQuestion === "View Total Salary by Department") {
-//   viewBudget();
 }
 })
 }
@@ -80,16 +78,16 @@ init();
 function viewDepartments() {
   db.query('SELECT * FROM department', function (err, results) {
     console.table(results);
-    init();
   });
+  init();
 }
 
 // function to view role data
 function viewRoles() {
   db.query('SELECT * FROM role', function (err, results) {
     console.table(results);
-    init();
   });
+  init();
 }
 
 // function to view employee data
@@ -128,10 +126,11 @@ function addDepartment() {
         } else {
           console.log(`Department '${departmentName}' added successfully.`);
         }
-        
-        viewDepartments();
-        init();
       });
+      db.query('SELECT * FROM department', function (err, results) {
+        console.table(results);
+      });
+      init();
     });
 }
 
@@ -184,9 +183,11 @@ function addRole() {
         } else {
           console.log(`Role '${roleTitle}' added successfully.`);
         }
-        viewRoles();
-        init();
       });
+      db.query('SELECT * FROM role', function (err, results) {
+        console.table(results);
+      });
+      init();
     });
 }
 
@@ -250,9 +251,11 @@ function addEmployee() {
         } else {
           console.log(`Employee '${firstName} ${lastName}' added successfully.`);
         }
-        viewEmployees();
-        init();
       });
+      db.query(' SELECT employee.employeeID, employee.First_name, employee.Last_name, role.Title, role.DepartmentID, role.Salary, employee.ManagerID FROM employee INNER JOIN role ON role.RoleID=employee.RoleID;', function (err, results) {
+        console.table(results);
+      });
+      init();
     });
 }
 
@@ -294,11 +297,11 @@ function updateRole() {
         } else {
           console.log(`Employee with ID ${employeeId} updated successfully.`);
         }
-        
-        viewEmployees();
-        init();
-        
       });
+      db.query(' SELECT employee.employeeID, employee.First_name, employee.Last_name, role.Title, role.DepartmentID, role.Salary, employee.ManagerID FROM employee INNER JOIN role ON role.RoleID=employee.RoleID;', function (err, results) {
+        console.table(results);
+      });
+      init();
     });
 }
 
@@ -332,9 +335,8 @@ function viewEmployeeByManager() {
           console.table(results);
           console.log(`Number of employees: ${results.length}`);
         }
-        
-        init();
       });
+      init();
     });
 }
 
@@ -377,11 +379,11 @@ function updateManager() {
         } else {
           console.log(`Manager for employee with ID ${employeeId} updated successfully.`);
         }
-        
-        viewEmployees();
-        init();
-        
       });
+      db.query(' SELECT employee.employeeID, employee.First_name, employee.Last_name, role.Title, role.DepartmentID, role.Salary, employee.ManagerID FROM employee INNER JOIN role ON role.RoleID=employee.RoleID;', function (err, results) {
+        console.table(results);
+      });
+      init();
     });
 }
 

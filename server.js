@@ -85,10 +85,11 @@ function viewRoles() {
 
 // function to view employee data
 function viewEmployees() {
-  db.query('SELECT * FROM employee', function (err, results) {
+  db.query(' SELECT employee.employeeID, employee.First_name, employee.Last_name, role.Title, role.DepartmentID, role.Salary, employee.ManagerID FROM employee INNER JOIN role ON role.RoleID=employee.RoleID;', function (err, results) {
     console.table(results);
     init();
   });
+ 
 }
 
 //fucntion to add a department

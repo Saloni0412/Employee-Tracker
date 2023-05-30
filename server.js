@@ -36,6 +36,9 @@ const questions = [
       "add a role",
       "add an employee",
       "update an employee role",
+      "view employee by manager",
+      "update employee manager",
+      "View Total Salary by Department",
     ]
   }
 ]
@@ -61,6 +64,12 @@ if (databaseQuestion === "view all departments") {
   addEmployee()
 } else if (databaseQuestion === "update an employee role") {
   updateRole();
+} else if (databaseQuestion === "view employee by manager") {
+  viewEmployeeByManager();
+} else if (databaseQuestion === "update employee manager") {
+  updateManager();
+// } else if (databaseQuestion === "View Total Salary by Department") {
+//   viewBudget();
 }
 })
 }
@@ -292,3 +301,87 @@ function updateRole() {
       });
     });
 }
+
+//Bonus 1
+// function to view employees by manager
+function viewEmployeeByManager() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "managerId",
+        message: "Enter the ID of the manager to view employees:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Manager ID must be a positive integer.";
+          }
+          return true;
+        }
+      }
+    ])
+    .then((data) => {
+      const { managerId } = data;
+      
+      const query = "SELECT * FROM employee WHERE ManagerID = ?";
+
+      db.query(query, [managerId], function (err, results) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("Employees:");
+          console.table(results);
+          console.log(`Number of employees: ${results.length}`);
+        }
+        
+        init();
+      });
+    });
+}
+
+// Bonus 2
+// function to update employee managers
+function updateManager() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "employeeId",
+        message: "Enter the ID of the employee to update:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Employee ID must be a positive integer.";
+          }
+          return true;
+        }
+      },
+      {
+        type: "input",
+        name: "ManagerID",
+        message: "Enter the new Manager ID for the employee:",
+        validate: function (input) {
+          if (!/^\d+$/.test(input)) {
+            return "Manager ID must be a positive integer.";
+          }
+          return true;
+        }
+      }
+    ])
+    .then((data) => {
+      const { employeeId, ManagerID } = data;
+      
+      const query = "UPDATE employee SET ManagerID = ? WHERE employeeID = ?";
+
+      db.query(query, [ManagerID, employeeId], function (err, result) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(`Manager for employee with ID ${employeeId} updated successfully.`);
+        }
+        
+        viewEmployees();
+        init();
+        
+      });
+    });
+}
+
